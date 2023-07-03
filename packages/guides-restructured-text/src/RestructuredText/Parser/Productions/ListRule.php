@@ -22,6 +22,7 @@ use phpDocumentor\Guides\Nodes\ParagraphNode;
 use phpDocumentor\Guides\RestructuredText\Parser\Buffer;
 use phpDocumentor\Guides\RestructuredText\Parser\DocumentParserContext;
 use phpDocumentor\Guides\RestructuredText\Parser\LinesIterator;
+use phpDocumentor\Guides\RestructuredText\Parser\UnindentStrategy;
 
 use function count;
 use function ltrim;
@@ -48,7 +49,7 @@ final class ListRule implements Rule
      */
     private const LIST_MARKER = '/
         ^(
-            [-+*\x{2022}\x{2023}\x{2043}]     # match bullet list markers: "*", "+", "-", "•", "‣", or "⁃"        
+            [-+*\x{2022}\x{2023}\x{2043}]     # match bullet list markers: "*", "+", "-", "•", "‣", or "⁃"
         )
         (?:\s+|$)
          # capture the spaces between marker and text to determine the list item text offset
@@ -70,11 +71,11 @@ final class ListRule implements Rule
     {
         $documentIterator = $documentParserContext->getDocumentIterator();
 
-        $buffer = new Buffer();
+        $buffer = new Buffer(unindentStrategy: UnindentStrategy::FIRST);
         //First line sets the listmarker of the list, and the indentation of the current item.
         $listConfig = $this->getItemConfig($documentIterator->current());
         if (trim($documentIterator->current()) !== $listConfig['marker']) {
-            $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
+            $buffer->push(mb_substr($documentIterator->current(), 2));
         }
 
         $items = [];
@@ -88,7 +89,7 @@ final class ListRule implements Rule
             if ($this->isListItemStart($documentIterator->current())) {
                 $listConfig = $this->getItemConfig($documentIterator->current());
                 $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
-                $buffer = new Buffer();
+                $buffer = new Buffer(unindentStrategy: UnindentStrategy::FIRST);
             }
 
             // the list item offset is determined by the offset of the first text.
@@ -103,7 +104,7 @@ final class ListRule implements Rule
                 continue;
             }
 
-            $buffer->push(mb_substr($documentIterator->current(), $listConfig['indenting']));
+            $buffer->push(mb_substr($documentIterator->current(), 2));
         }
 
         $items[] = $this->parseListItem($listConfig, $buffer, $documentParserContext);
