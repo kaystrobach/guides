@@ -15,7 +15,18 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
-class HintDirective extends AbstractAdmonitionDirective
+/**
+ * Directive to create a hint admonition.
+ *
+ * Example:
+ *
+ * ```rest
+ *  .. hint::
+ *
+ *      This is a hint admonition.
+ * ```
+ */
+final class HintDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)
     {

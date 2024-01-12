@@ -15,7 +15,18 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
-class CautionDirective extends AbstractAdmonitionDirective
+/**
+ * Directive to create a caution admonition.
+ *
+ * Example:
+ *
+ * ```rest
+ *  .. caution::
+ *
+ *      This is a caution admonition.
+ * ```
+ */
+final class CautionDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)
     {

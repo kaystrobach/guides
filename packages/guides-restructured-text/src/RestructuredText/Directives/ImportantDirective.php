@@ -15,7 +15,18 @@ namespace phpDocumentor\Guides\RestructuredText\Directives;
 
 use phpDocumentor\Guides\RestructuredText\Parser\Productions\Rule;
 
-class ImportantDirective extends AbstractAdmonitionDirective
+/**
+ * Directive to create a important admonition.
+ *
+ * Example:
+ *
+ * ```rest
+ *  .. important::
+ *
+ *      This is a important admonition.
+ * ```
+ */
+final class ImportantDirective extends AbstractAdmonitionDirective
 {
     public function __construct(protected Rule $startingRule)
     {
